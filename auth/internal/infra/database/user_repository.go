@@ -18,7 +18,6 @@ func NewUserRepository(dbPool *pgxpool.Pool) *UserRepository {
 
 var ErrUserNotFound = errors.New("user not found")
 
-// TODO - testar
 func (r *UserRepository) GetUserByDocument(ctx context.Context, document string) (*user.User, error) {
 	m, err := r.q.GetUserByDocument(ctx, document)
 	if err != nil {
@@ -27,10 +26,9 @@ func (r *UserRepository) GetUserByDocument(ctx context.Context, document string)
 		}
 		return nil, err
 	}
-	return user.NewUser(m.Document, m.Name, m.Email, m.Password, m.Birthdate, user.WithID(m.ID))
+	return user.NewUser(m.Document, m.Name, m.Email, m.Birthdate, user.WithID(m.ID), user.WithPasswordHashed(m.Password))
 }
 
-// TODO - testar
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*user.User, error) {
 	m, err := r.q.GetUserByEmail(ctx, email)
 	if err != nil {
@@ -39,10 +37,9 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*use
 		}
 		return nil, err
 	}
-	return user.NewUser(m.Document, m.Name, m.Email, m.Password, m.Birthdate, user.WithID(m.ID))
+	return user.NewUser(m.Document, m.Name, m.Email, m.Birthdate, user.WithID(m.ID), user.WithPasswordHashed(m.Password))
 }
 
-// TODO - testar
 func (r *UserRepository) Create(ctx context.Context, user *user.User) error {
 	params := InsertUserParams{
 		ID:        user.ID(),

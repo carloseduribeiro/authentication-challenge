@@ -22,7 +22,6 @@ func TestNewUserValidations(t *testing.T) {
 		document  string
 		name      string
 		email     string
-		password  string
 		birthDate time.Time
 		userOpts  []Option
 	}
@@ -34,13 +33,13 @@ func TestNewUserValidations(t *testing.T) {
 		{"should not possible to create a user with an invalid document", args{document: "12345"}, "invalid cpf"},
 		{"should not possible to create a user with name length less than 3", args{document: validDoc, name: "aa"}, "invalid name"},
 		{"should not possible to create a user with an empty email", args{document: validDoc, name: "Jhon", email: ""}, "invalid email"},
-		{"should not possible to create a user with an empty password", args{document: validDoc, name: "Jhon", email: "jhon@user.com"}, "invalid password"},
-		{"should not possible to create a user with a password length greater than 72", args{document: validDoc, name: "Jhon", email: "jhon@user.com", password: string(make([]byte, 73))}, bcrypt.ErrPasswordTooLong.Error()},
-		{"should not possible to create a user with when an option returns error", args{document: validDoc, name: "Jhon", email: "jhon@user.com", password: "12345", userOpts: []Option{WithUUIDGeneratorFunc(uuidGeneratorFuncMock)}}, fakeErr.Error()},
+		{"should not possible to create a user with an empty password", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []Option{WithPassword("")}}, "invalid password"},
+		{"should not possible to create a user with a password length greater than 72", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []Option{WithPassword(string(make([]byte, 73)))}}, bcrypt.ErrPasswordTooLong.Error()},
+		{"should not possible to create a user with when an option returns error", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []Option{WithUUIDGeneratorFunc(uuidGeneratorFuncMock), WithPassword("12345")}}, fakeErr.Error()},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewUser(tt.args.document, tt.args.name, tt.args.email, tt.args.password, tt.args.birthDate, tt.args.userOpts...)
+			got, err := NewUser(tt.args.document, tt.args.name, tt.args.email, tt.args.birthDate, tt.args.userOpts...)
 			assert.Error(t, err)
 			assert.EqualError(t, err, tt.expectedErrStr)
 			assert.Nil(t, got)
@@ -49,47 +48,32 @@ func TestNewUserValidations(t *testing.T) {
 }
 
 func TestNewUser(t *testing.T) {
-	t.Run("must generate the password with bcrypt DefaultCost", func(t *testing.T) {
-		// given
-		password := "12345"
-		document, name, email, birthDate := validDoc, "Jhon", "jhon@user.com", time.Now()
-		// when
-		got, err := NewUser(document, name, email, password, birthDate)
-		// then
-		assert.NoError(t, err)
-		assert.NoError(t, bcrypt.CompareHashAndPassword([]byte(got.Password()), []byte(password)))
-	})
-
 	t.Run("should create a DefaultType user by default", func(t *testing.T) {
 		// given
-		password := "12345"
 		document, name, email, birthDate := validDoc, "Jhon", "jhon@user.com", time.Now()
 		// when
-		got, err := NewUser(document, name, email, password, birthDate)
+		got, err := NewUser(document, name, email, birthDate)
 		// then
 		assert.NoError(t, err)
 		assert.Equal(t, DefaultType, got.Type())
 		assert.Equal(t, document, got.Document())
 		assert.Equal(t, name, got.Name())
 		assert.Equal(t, email, got.Email())
-		assert.NoError(t, bcrypt.CompareHashAndPassword([]byte(got.Password()), []byte(password)))
 		assert.Equal(t, birthDate, got.BirthDate())
 	})
 
 	t.Run("should create an AdminType user when the domain email is admsDomain", func(t *testing.T) {
 		// given
 		email := "jhon" + admsDomain
-		password := "12345"
 		document, name, birthDate := validDoc, "Jhon", time.Now()
 		// when
-		got, err := NewUser(document, name, email, password, birthDate)
+		got, err := NewUser(document, name, email, birthDate)
 		// then
 		assert.NoError(t, err)
 		assert.Equal(t, AdminType, got.Type())
 		assert.Equal(t, document, got.Document())
 		assert.Equal(t, name, got.Name())
 		assert.Equal(t, email, got.Email())
-		assert.NoError(t, bcrypt.CompareHashAndPassword([]byte(got.Password()), []byte(password)))
 		assert.Equal(t, birthDate, got.BirthDate())
 	})
 
@@ -99,9 +83,9 @@ func TestNewUser(t *testing.T) {
 		fakeUUIDGeneratorFunc := func() (uuid.UUID, error) {
 			return id, nil
 		}
-		document, name, password, email, birthDate := validDoc, "Jhon", "12345", "jhon@doe.com", time.Now()
+		document, name, email, birthDate := validDoc, "Jhon", "jhon@doe.com", time.Now()
 		// when
-		got, err := NewUser(document, name, email, password, birthDate, WithUUIDGeneratorFunc(fakeUUIDGeneratorFunc))
+		got, err := NewUser(document, name, email, birthDate, WithUUIDGeneratorFunc(fakeUUIDGeneratorFunc))
 		// then
 		assert.NoError(t, err)
 		assert.Equal(t, id, got.ID())
@@ -110,9 +94,9 @@ func TestNewUser(t *testing.T) {
 	t.Run("must create a user with the id entered in the WithId option", func(t *testing.T) {
 		// given
 		id := uuid.New()
-		document, name, password, email, birthDate := validDoc, "Jhon", "12345", "jhon@doe.com", time.Now()
+		document, name, email, birthDate := validDoc, "Jhon", "jhon@doe.com", time.Now()
 		// when
-		got, err := NewUser(document, name, email, password, birthDate, WithID(id))
+		got, err := NewUser(document, name, email, birthDate, WithID(id))
 		// then
 		assert.NoError(t, err)
 		assert.Equal(t, id, got.ID())
@@ -120,9 +104,9 @@ func TestNewUser(t *testing.T) {
 
 	t.Run("must create a user with the type entered in the WithType option", func(t *testing.T) {
 		// given
-		document, name, password, email, birthDate := validDoc, "Jhon", "12345", "jhon@doe.com", time.Now()
+		document, name, email, birthDate := validDoc, "Jhon", "jhon@doe.com", time.Now()
 		// when
-		got, err := NewUser(document, name, email, password, birthDate, WithType(AdminType))
+		got, err := NewUser(document, name, email, birthDate, WithType(AdminType))
 		// then
 		assert.NoError(t, err)
 		assert.Equal(t, AdminType, got.Type())

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/carloseduribeiro/auth-challenge/auth/pkg/domain/entity/cpf"
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 	"strings"
 	"time"
 )
@@ -22,7 +21,7 @@ type User struct {
 }
 
 // NewUser creates a new user.
-func NewUser(document, name, email, password string, birthDate time.Time, userOpts ...Option) (*User, error) {
+func NewUser(document, name, email string, birthDate time.Time, userOpts ...Option) (*User, error) {
 	if !cpf.Validate(document) {
 		return nil, errors.New("invalid cpf")
 	}
@@ -31,13 +30,6 @@ func NewUser(document, name, email, password string, birthDate time.Time, userOp
 	}
 	if len(email) < 3 {
 		return nil, errors.New("invalid email")
-	}
-	if len(password) == 0 {
-		return nil, errors.New("invalid password")
-	}
-	pass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return nil, err
 	}
 	id, err := uuid.NewUUID()
 	if err != nil {
@@ -49,7 +41,6 @@ func NewUser(document, name, email, password string, birthDate time.Time, userOp
 		document:  document,
 		name:      name,
 		email:     email,
-		password:  string(pass),
 		birthDate: birthDate,
 	}
 	if strings.Contains(email, admsDomain) {

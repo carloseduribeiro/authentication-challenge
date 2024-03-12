@@ -52,7 +52,7 @@ func (c *CreateUser) Execute(ctx context.Context, input CreateUserInputDto) (*Cr
 		return nil, errors.New("user already exists with the given email")
 	}
 	u, err := user.NewUser(
-		input.Document, input.Name, input.Email, input.Password, input.BirthDate, user.WithUUIDGeneratorFunc(c.uuidGeneratorFunc))
+		input.Document, input.Name, input.Email, input.BirthDate, user.WithUUIDGeneratorFunc(c.uuidGeneratorFunc), user.WithPassword(input.Password))
 	if err != nil {
 		return nil, err
 	}
