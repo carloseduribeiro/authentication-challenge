@@ -1,0 +1,37 @@
+version: "3.8"
+
+networks:
+  auth-challenge-nw:
+    name: auth-challenge-nw
+    driver: bridge
+
+services:
+  auth_db:
+    container_name: auth_db
+    hostname: auth_db
+    image: postgres:16
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 15s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "5432:5432"
+    networks:
+      - auth-challenge-nw
+
+  adminer:
+    container_name: adminer
+    image: adminer:4
+    restart: always
+    environment:
+      - ADMINER_DESIGN=dracula
+    ports:
+      - "8081:8080"
+    networks:
+      - auth-challenge-nw
