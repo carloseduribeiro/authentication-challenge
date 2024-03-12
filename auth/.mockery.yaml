@@ -1,0 +1,15 @@
+with-expecter: True
+inpackage: False
+dir: mocks/{{ replaceAll .InterfaceDirRelative "internal" "internal_" }}
+mockname: "{{.InterfaceName}}"
+outpkg: "{{.PackageName}}"
+filename: "{{.InterfaceName}}.go"
+packages:
+  github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user:
+    config:
+      all: false
+    interfaces:
+      TypesPackage:
+      Repository:
+        config:
+          with-expecter: True
