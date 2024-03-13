@@ -1,5 +1,5 @@
 ### Create user
-POST http://{{host}}:{{port}}/auth/users
+POST http://{{host}}:{{authPort}}/auth/users
 Content-Type: application/json
 
 {
@@ -10,8 +10,8 @@ Content-Type: application/json
   "senha": "Jd1996"
 }
 
-### Login
-POST http://{{host}}:{{port}}/auth/users/login
+### Login (Session token)
+POST http://{{host}}:{{authPort}}/auth/users/login
 Content-Type: application/json
 
 {

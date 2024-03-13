@@ -1,4 +1,4 @@
-DROP INDEX IF EXISTS auth.index_document;
+DROP INDEX IF EXISTS index_users_document;
 DROP TABLE IF EXISTS auth.users;
 DROP TYPE IF EXISTS auth.USER_TYPE;
 DROP SCHEMA IF EXISTS auth;

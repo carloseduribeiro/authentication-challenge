@@ -24,6 +24,8 @@ func RunMigrations(databaseURL string) {
 	if err != nil {
 		log.Fatalf("could not apply the migration: %s", err)
 	}
-	m.Up()
+	if err = m.Up(); err != nil {
+		log.Fatal(err)
+	}
 	defer m.Close()
 }

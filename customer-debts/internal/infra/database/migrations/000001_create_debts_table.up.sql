@@ -8,3 +8,5 @@ CREATE TABLE IF NOT EXISTS customer.debts
     amount     DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP      NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS index_document_debts ON customer.debts (document);
