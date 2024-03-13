@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/application/usecase"
+	"github.com/carloseduribeiro/authentication-challenge/auth/internal/application/usecase"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
-	"github.com/carloseduribeiro/auth-challenge/customer-debts/internal/application/usecase"
-	"github.com/carloseduribeiro/auth-challenge/customer-debts/internal/domain/entity"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/cpf"
+	"github.com/carloseduribeiro/authentication-challenge/customer-debts/internal/application/usecase"
+	"github.com/carloseduribeiro/authentication-challenge/customer-debts/internal/domain/entity"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/cpf"
 	"github.com/go-chi/chi/v5"
 	"net/http"
 )

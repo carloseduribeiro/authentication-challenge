@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"github.com/carloseduribeiro/auth-challenge/customer-debts/configs"
-	"github.com/carloseduribeiro/auth-challenge/customer-debts/internal/infra/database"
-	"github.com/carloseduribeiro/auth-challenge/customer-debts/internal/infra/http/handlers"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/config"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/db"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/webserver"
+	"github.com/carloseduribeiro/authentication-challenge/customer-debts/configs"
+	"github.com/carloseduribeiro/authentication-challenge/customer-debts/internal/infra/database"
+	"github.com/carloseduribeiro/authentication-challenge/customer-debts/internal/infra/http/handlers"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/config"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/db"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/webserver"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net/http"

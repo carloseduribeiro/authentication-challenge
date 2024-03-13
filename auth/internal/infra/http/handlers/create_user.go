@@ -3,8 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/application/usecase"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
+	"github.com/carloseduribeiro/authentication-challenge/auth/internal/application/usecase"
+	"github.com/carloseduribeiro/authentication-challenge/auth/internal/domain/entity"
 	"github.com/google/uuid"
 	"net/http"
 )

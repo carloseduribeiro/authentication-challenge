@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"errors"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
+	"github.com/carloseduribeiro/authentication-challenge/auth/internal/domain/entity"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/pashagolub/pgxmock/v3"

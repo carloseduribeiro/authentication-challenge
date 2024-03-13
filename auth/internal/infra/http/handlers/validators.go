@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/application/usecase"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/cpf"
+	"github.com/carloseduribeiro/authentication-challenge/auth/internal/application/usecase"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/cpf"
 	"regexp"
 	"strings"
 )

@@ -2,7 +2,7 @@ package entity
 
 import (
 	"errors"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/cpf"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/cpf"
 	"github.com/google/uuid"
 	"time"
 )

@@ -1,8 +1,8 @@
 version: "3.8"
 
 networks:
-  auth-challenge-nw:
-    name: auth-challenge-nw
+  authentication-challenge-nw:
+    name: authentication-challenge-nw
     driver: bridge
 
 services:
@@ -23,26 +23,25 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - auth-challenge-nw
+      - authentication-challenge-nw
 
-  debts_db:
-    <<: *db
-    container_name: debts_db
-    hostname: debts_db
-    environment:
-      POSTGRES_DB: debts_db
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    ports:
-      - "5433:5432"
+#  debts_db:
+#    <<: *db
+#    container_name: debts_db
+#    hostname: debts_db
+#    environment:
+#      POSTGRES_DB: debts_db
+#      POSTGRES_USER: root
+#      POSTGRES_PASSWORD: root
+#    ports:
+#      - "5433:5432"
 
-  adminer:
-    container_name: adminer
-    image: adminer:4
-    restart: always
-    environment:
-      - ADMINER_DESIGN=dracula
+  auth_app: &app
+    container_name: auth_app
+    hostname: auth_app
+    build:
+      context: ./auth
     ports:
-      - "8081:8080"
+      - "3000:3001"
     networks:
-      - auth-challenge-nw
+      - authentication-challenge-nw

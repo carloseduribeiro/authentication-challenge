@@ -1,3 +1,3 @@
-module github.com/carloseduribeiro/auth-challenge/lib-utils
+module github.com/carloseduribeiro/authentication-challenge/lib-utils
 
 go 1.22.0

@@ -5,7 +5,7 @@ package entity
 import (
 	context "context"
 
-	entity "github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
+	entity "github.com/carloseduribeiro/authentication-challenge/auth/internal/domain/entity"
 	mock "github.com/stretchr/testify/mock"
 )
 

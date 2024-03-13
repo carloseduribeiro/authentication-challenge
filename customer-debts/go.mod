@@ -1,4 +1,4 @@
-module github.com/carloseduribeiro/auth-challenge/customer-debts
+module github.com/carloseduribeiro/authentication-challenge/customer-debts
 
 go 1.22.0
 

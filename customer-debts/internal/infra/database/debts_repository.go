@@ -2,7 +2,7 @@ package database
 
 import (
 	"context"
-	"github.com/carloseduribeiro/auth-challenge/customer-debts/internal/domain/entity"
+	"github.com/carloseduribeiro/authentication-challenge/customer-debts/internal/domain/entity"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

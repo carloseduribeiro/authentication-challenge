@@ -3,7 +3,7 @@ package entity
 import (
 	"errors"
 	"fmt"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/cpf"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/cpf"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"strings"

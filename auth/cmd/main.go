@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/carloseduribeiro/auth-challenge/auth/configs"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/http/handlers"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/config"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/db"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/webserver"
+	"github.com/carloseduribeiro/authentication-challenge/auth/configs"
+	"github.com/carloseduribeiro/authentication-challenge/auth/internal/infra/database"
+	"github.com/carloseduribeiro/authentication-challenge/auth/internal/infra/http/handlers"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/config"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/db"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/webserver"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"log"

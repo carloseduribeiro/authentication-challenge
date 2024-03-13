@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"context"
-	"github.com/carloseduribeiro/auth-challenge/customer-debts/internal/domain/entity"
-	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/date"
+	"github.com/carloseduribeiro/authentication-challenge/customer-debts/internal/domain/entity"
+	"github.com/carloseduribeiro/authentication-challenge/lib-utils/pkg/date"
 	"github.com/google/uuid"
 	"time"
 )
