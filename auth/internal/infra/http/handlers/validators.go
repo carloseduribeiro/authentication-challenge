@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/application/usecase"
-	"github.com/carloseduribeiro/auth-challenge/auth/pkg/domain/entity/cpf"
+	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/cpf"
 	"regexp"
 	"strings"
 )

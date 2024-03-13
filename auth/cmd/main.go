@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/carloseduribeiro/auth-challenge/auth/configs"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/webserver"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/webserver/http/handlers"
+	handlers2 "github.com/carloseduribeiro/auth-challenge/auth/internal/infra/http/handlers"
+	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/webserver"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"log"
@@ -27,13 +27,13 @@ func main() {
 	webServer := webserver.NewWebServer(config.WebServerPort)
 
 	userRepository := database.NewUserRepository(dbPool)
-	createUserHandler := handlers.NewCreateUser(userRepository, uuid.NewUUID)
+	createUserHandler := handlers2.NewCreateUser(userRepository, uuid.NewUUID)
 	if err = webServer.AddHandler(http.MethodPost, "/auth/users", createUserHandler.Handler); err != nil {
 		log.Fatal(err)
 	}
 
 	sessionRepository := database.NewSessionRepository(dbPool)
-	loginHandler := handlers.NewLogin(userRepository, sessionRepository, config.JWTSecretKey, config.SessionMaxDuration)
+	loginHandler := handlers2.NewLogin(userRepository, sessionRepository, config.JWTSecretKey, config.SessionMaxDuration)
 	if err = webServer.AddHandler(http.MethodPost, "/auth/users/login", loginHandler.Handler); err != nil {
 		log.Fatal(err)
 	}

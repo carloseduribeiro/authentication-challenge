@@ -6,7 +6,7 @@ import (
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
 	entityMocks "github.com/carloseduribeiro/auth-challenge/auth/mocks/internal_/domain/entity"
-	"github.com/carloseduribeiro/auth-challenge/auth/pkg/date"
+	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/date"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/mock"

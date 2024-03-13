@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
-	"github.com/carloseduribeiro/auth-challenge/auth/pkg/date"
+	"github.com/carloseduribeiro/auth-challenge/lib-utils/pkg/date"
 	"github.com/google/uuid"
 )
 
