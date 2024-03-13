@@ -1,4 +1,4 @@
-package user
+package entity
 
 import (
 	"errors"
@@ -23,7 +23,7 @@ func TestNewUserValidations(t *testing.T) {
 		name      string
 		email     string
 		birthDate time.Time
-		userOpts  []Option
+		userOpts  []UserOption
 	}
 	tests := []struct {
 		name           string
@@ -33,9 +33,9 @@ func TestNewUserValidations(t *testing.T) {
 		{"should not possible to create a user with an invalid document", args{document: "12345"}, "invalid cpf"},
 		{"should not possible to create a user with name length less than 3", args{document: validDoc, name: "aa"}, "invalid name"},
 		{"should not possible to create a user with an empty email", args{document: validDoc, name: "Jhon", email: ""}, "invalid email"},
-		{"should not possible to create a user with an empty password", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []Option{WithPassword("")}}, "invalid password"},
-		{"should not possible to create a user with a password length greater than 72", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []Option{WithPassword(string(make([]byte, 73)))}}, bcrypt.ErrPasswordTooLong.Error()},
-		{"should not possible to create a user with when an option returns error", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []Option{WithUUIDGeneratorFunc(uuidGeneratorFuncMock), WithPassword("12345")}}, fakeErr.Error()},
+		{"should not possible to create a user with an empty password", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []UserOption{WithPassword("")}}, "invalid password"},
+		{"should not possible to create a user with a password length greater than 72", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []UserOption{WithPassword(string(make([]byte, 73)))}}, bcrypt.ErrPasswordTooLong.Error()},
+		{"should not possible to create a user with when an option returns error", args{document: validDoc, name: "Jhon", email: "jhon@user.com", userOpts: []UserOption{WithUUIDGeneratorFunc(uuidGeneratorFuncMock), WithPassword("12345")}}, fakeErr.Error()},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

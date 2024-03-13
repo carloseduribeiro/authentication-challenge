@@ -1,4 +1,4 @@
-package user
+package entity
 
 import (
 	"errors"
@@ -6,6 +6,13 @@ import (
 	"github.com/google/uuid"
 	"strings"
 	"time"
+)
+
+type Type string
+
+const (
+	DefaultType Type = "default"
+	AdminType   Type = "admin"
 )
 
 const admsDomain = "@br.furabolso.com"
@@ -21,7 +28,8 @@ type User struct {
 }
 
 // NewUser creates a new user.
-func NewUser(document, name, email string, birthDate time.Time, userOpts ...Option) (*User, error) {
+// TODO: remove WithID option and add id argument to this constructor because its not needed.
+func NewUser(document, name, email string, birthDate time.Time, userOpts ...UserOption) (*User, error) {
 	if !cpf.Validate(document) {
 		return nil, errors.New("invalid cpf")
 	}

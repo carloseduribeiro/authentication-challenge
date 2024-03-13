@@ -3,18 +3,18 @@ package usecase
 import (
 	"context"
 	"errors"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
+	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
 	"github.com/carloseduribeiro/auth-challenge/auth/pkg/date"
 	"github.com/google/uuid"
 )
 
 type CreateUser struct {
-	repository        user.Repository
+	repository        entity.Repository
 	uuidGeneratorFunc func() (uuid.UUID, error)
 }
 
-func NewCreateUserUseCase(repository user.Repository, uuidGeneratorFunc func() (uuid.UUID, error)) *CreateUser {
+func NewCreateUserUseCase(repository entity.Repository, uuidGeneratorFunc func() (uuid.UUID, error)) *CreateUser {
 	return &CreateUser{
 		repository:        repository,
 		uuidGeneratorFunc: uuidGeneratorFunc,
@@ -51,10 +51,10 @@ func (c *CreateUser) Execute(ctx context.Context, input CreateUserInputDto) (*Cr
 	} else if u != nil {
 		return nil, ErrUserAlreadyExists
 	}
-	u, err := user.NewUser(
+	u, err := entity.NewUser(
 		input.Document, input.Name, input.Email, input.BirthDate.T,
-		user.WithUUIDGeneratorFunc(c.uuidGeneratorFunc),
-		user.WithPassword(input.Password),
+		entity.WithUUIDGeneratorFunc(c.uuidGeneratorFunc),
+		entity.WithPassword(input.Password),
 	)
 	if err != nil {
 		return nil, err

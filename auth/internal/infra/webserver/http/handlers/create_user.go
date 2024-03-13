@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/application/usecase"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
+	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/google/uuid"
 	"net/http"
 )
 
 type CreateUser struct {
-	repository        user.Repository
+	repository        entity.Repository
 	uuidGeneratorFunc func() (uuid.UUID, error)
 }
 
-func NewCreateUser(repository user.Repository, uuidGeneratorFunc func() (uuid.UUID, error)) *CreateUser {
+func NewCreateUser(repository entity.Repository, uuidGeneratorFunc func() (uuid.UUID, error)) *CreateUser {
 	return &CreateUser{
 		repository:        repository,
 		uuidGeneratorFunc: uuidGeneratorFunc,

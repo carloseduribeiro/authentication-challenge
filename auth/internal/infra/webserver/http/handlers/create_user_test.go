@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/application/usecase"
-	entity "github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
+	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
-	"github.com/carloseduribeiro/auth-challenge/auth/mocks/internal_/domain/entity/user"
+	entityMocks "github.com/carloseduribeiro/auth-challenge/auth/mocks/internal_/domain/entity"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -19,7 +19,7 @@ import (
 )
 
 type CreateUserHandlerTestSuite struct {
-	repoMock          *user.Repository
+	repoMock          *entityMocks.Repository
 	createUserHandler *CreateUser
 	rr                *httptest.ResponseRecorder
 	fakeId            uuid.UUID
@@ -36,7 +36,7 @@ func (t *CreateUserHandlerTestSuite) SetupTest() {
 }
 
 func (t *CreateUserHandlerTestSuite) SetupSubTest() {
-	t.repoMock = user.NewRepository(t.T())
+	t.repoMock = entityMocks.NewRepository(t.T())
 	t.rr = httptest.NewRecorder()
 	t.createUserHandler.repository = t.repoMock
 }

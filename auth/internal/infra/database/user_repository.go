@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"errors"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
+	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -18,7 +18,7 @@ func NewUserRepository(dbPool *pgxpool.Pool) *UserRepository {
 
 var ErrUserNotFound = errors.New("user not found")
 
-func (r *UserRepository) GetUserByDocument(ctx context.Context, document string) (*user.User, error) {
+func (r *UserRepository) GetUserByDocument(ctx context.Context, document string) (*entity.User, error) {
 	m, err := r.q.GetUserByDocument(ctx, document)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -26,10 +26,10 @@ func (r *UserRepository) GetUserByDocument(ctx context.Context, document string)
 		}
 		return nil, err
 	}
-	return user.NewUser(m.Document, m.Name, m.Email, m.Birthdate, user.WithID(m.ID), user.WithPasswordHashed(m.Password))
+	return entity.NewUser(m.Document, m.Name, m.Email, m.Birthdate, entity.WithID(m.ID), entity.WithPasswordHashed(m.Password))
 }
 
-func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*user.User, error) {
+func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*entity.User, error) {
 	m, err := r.q.GetUserByEmail(ctx, email)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -37,10 +37,10 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*use
 		}
 		return nil, err
 	}
-	return user.NewUser(m.Document, m.Name, m.Email, m.Birthdate, user.WithID(m.ID), user.WithPasswordHashed(m.Password))
+	return entity.NewUser(m.Document, m.Name, m.Email, m.Birthdate, entity.WithID(m.ID), entity.WithPasswordHashed(m.Password))
 }
 
-func (r *UserRepository) Create(ctx context.Context, user *user.User) error {
+func (r *UserRepository) Create(ctx context.Context, user *entity.User) error {
 	params := InsertUserParams{
 		ID:        user.ID(),
 		Document:  user.Document(),

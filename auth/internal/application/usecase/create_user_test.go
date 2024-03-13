@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 	"errors"
-	entity "github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
+	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
-	"github.com/carloseduribeiro/auth-challenge/auth/mocks/internal_/domain/entity/user"
+	entityMocks "github.com/carloseduribeiro/auth-challenge/auth/mocks/internal_/domain/entity"
 	"github.com/carloseduribeiro/auth-challenge/auth/pkg/date"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -26,13 +26,13 @@ func fakeUUIDGenerator() (uuid.UUID, error) {
 }
 
 type CreateUserTestSuite struct {
-	repoMock *user.Repository
+	repoMock *entityMocks.Repository
 	useCase  *CreateUser
 	suite.Suite
 }
 
 func (c *CreateUserTestSuite) SetupSubTest() {
-	c.repoMock = user.NewRepository(c.T())
+	c.repoMock = entityMocks.NewRepository(c.T())
 	c.useCase = NewCreateUserUseCase(c.repoMock, fakeUUIDGenerator)
 }
 

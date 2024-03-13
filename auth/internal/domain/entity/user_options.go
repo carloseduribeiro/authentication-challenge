@@ -1,4 +1,4 @@
-package user
+package entity
 
 import (
 	"errors"
@@ -6,9 +6,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Option func(*User) error
+type UserOption func(*User) error
 
-func WithUUIDGeneratorFunc(uuidGeneratorFunc func() (uuid.UUID, error)) Option {
+func WithUUIDGeneratorFunc(uuidGeneratorFunc func() (uuid.UUID, error)) UserOption {
 	return func(u *User) error {
 		id, err := uuidGeneratorFunc()
 		if err != nil {
@@ -19,21 +19,21 @@ func WithUUIDGeneratorFunc(uuidGeneratorFunc func() (uuid.UUID, error)) Option {
 	}
 }
 
-func WithID(id uuid.UUID) Option {
+func WithID(id uuid.UUID) UserOption {
 	return func(u *User) error {
 		u.id = id
 		return nil
 	}
 }
 
-func WithType(userType Type) Option {
+func WithType(userType Type) UserOption {
 	return func(u *User) error {
 		u.userType = userType
 		return nil
 	}
 }
 
-func WithPassword(password string) Option {
+func WithPassword(password string) UserOption {
 	return func(u *User) error {
 		if len(password) == 0 {
 			return errors.New("invalid password")
@@ -47,7 +47,7 @@ func WithPassword(password string) Option {
 	}
 }
 
-func WithPasswordHashed(passwordHashed string) Option {
+func WithPasswordHashed(passwordHashed string) UserOption {
 	return func(u *User) error {
 		if len(passwordHashed) == 0 {
 			return errors.New("invalid password")

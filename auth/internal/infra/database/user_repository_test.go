@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"errors"
-	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
+	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/pashagolub/pgxmock/v3"
@@ -68,7 +68,7 @@ func (t *UserRepositoryTestSuite) TestGetUserByDocument() {
 		document, name, email, password, birthDate := validDocument, "Jhon", "jhon@dow.com", "12345", time.Now()
 		hashedPass, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		rows := t.pgxMock.NewRows([]string{"id", "document", "name", "email", "password", "birthdate", "type"}).
-			AddRow(staticUUID, document, name, email, string(hashedPass), birthDate, string(user.DefaultType))
+			AddRow(staticUUID, document, name, email, string(hashedPass), birthDate, string(entity.DefaultType))
 		// when
 		t.pgxMock.ExpectQuery(getUserByDocument).WithArgs(document).WillReturnRows(rows)
 		result, err := t.repository.GetUserByDocument(context.TODO(), document)
@@ -81,7 +81,7 @@ func (t *UserRepositoryTestSuite) TestGetUserByDocument() {
 		t.Equal(email, result.Email())
 		t.NoError(bcrypt.CompareHashAndPassword([]byte(result.Password()), []byte(password)))
 		t.Equal(birthDate, result.BirthDate())
-		t.Equal(user.DefaultType, result.Type())
+		t.Equal(entity.DefaultType, result.Type())
 	})
 }
 
@@ -118,7 +118,7 @@ func (t *UserRepositoryTestSuite) TestGetUserByEmail() {
 		document, name, email, password, birthDate := validDocument, "Jhon", "jhon@dow.com", "12345", time.Now()
 		hashedPass, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		rows := t.pgxMock.NewRows([]string{"id", "document", "name", "email", "password", "birthdate", "type"}).
-			AddRow(staticUUID, document, name, email, string(hashedPass), birthDate, string(user.DefaultType))
+			AddRow(staticUUID, document, name, email, string(hashedPass), birthDate, string(entity.DefaultType))
 		// when
 		t.pgxMock.ExpectQuery(getUserByEmail).WithArgs(document).WillReturnRows(rows)
 		result, err := t.repository.GetUserByEmail(context.TODO(), document)
@@ -131,14 +131,14 @@ func (t *UserRepositoryTestSuite) TestGetUserByEmail() {
 		t.Equal(email, result.Email())
 		t.NoError(bcrypt.CompareHashAndPassword([]byte(result.Password()), []byte(password)))
 		t.Equal(birthDate, result.BirthDate())
-		t.Equal(user.DefaultType, result.Type())
+		t.Equal(entity.DefaultType, result.Type())
 	})
 }
 
 func (t *UserRepositoryTestSuite) TestCreate() {
 	t.Run("must insert a new user", func() {
 		// given
-		u := new(user.User)
+		u := new(entity.User)
 		// when
 		t.pgxMock.ExpectExec(insertUser).
 			WithArgs(u.ID(), u.Document(), u.Name(), u.Email(), u.Password(), u.BirthDate(), AuthUserType(u.Type())).
@@ -151,7 +151,7 @@ func (t *UserRepositoryTestSuite) TestCreate() {
 
 	t.Run("must return an error", func() {
 		// given
-		u := new(user.User)
+		u := new(entity.User)
 		someErr := errors.New("some error")
 		// when
 		t.pgxMock.ExpectExec(insertUser).
