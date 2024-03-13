@@ -12,3 +12,5 @@ CREATE TABLE IF NOT EXISTS auth.users
     birthDate DATE                NOT NULL,
     type      auth.USER_TYPE      NOT NULL default 'default'
 );
+
+CREATE INDEX IF NOT EXISTS auth.index_document ON auth.users (document);
