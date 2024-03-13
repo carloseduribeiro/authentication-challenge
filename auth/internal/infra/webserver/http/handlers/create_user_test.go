@@ -19,7 +19,7 @@ import (
 )
 
 type CreateUserHandlerTestSuite struct {
-	repoMock          *entityMocks.Repository
+	repoMock          *entityMocks.UserRepository
 	createUserHandler *CreateUser
 	rr                *httptest.ResponseRecorder
 	fakeId            uuid.UUID
@@ -36,7 +36,7 @@ func (t *CreateUserHandlerTestSuite) SetupTest() {
 }
 
 func (t *CreateUserHandlerTestSuite) SetupSubTest() {
-	t.repoMock = entityMocks.NewRepository(t.T())
+	t.repoMock = entityMocks.NewUserRepository(t.T())
 	t.rr = httptest.NewRecorder()
 	t.createUserHandler.repository = t.repoMock
 }

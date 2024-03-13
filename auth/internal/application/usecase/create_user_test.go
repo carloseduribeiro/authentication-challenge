@@ -26,13 +26,13 @@ func fakeUUIDGenerator() (uuid.UUID, error) {
 }
 
 type CreateUserTestSuite struct {
-	repoMock *entityMocks.Repository
+	repoMock *entityMocks.UserRepository
 	useCase  *CreateUser
 	suite.Suite
 }
 
 func (c *CreateUserTestSuite) SetupSubTest() {
-	c.repoMock = entityMocks.NewRepository(c.T())
+	c.repoMock = entityMocks.NewUserRepository(c.T())
 	c.useCase = NewCreateUserUseCase(c.repoMock, fakeUUIDGenerator)
 }
 

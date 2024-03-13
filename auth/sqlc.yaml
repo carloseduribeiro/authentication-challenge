@@ -16,3 +16,5 @@ sql:
               type: "UUID"
           - db_type: "date"
             go_type: "time.Time"
+          - db_type: "pg_catalog.timestamp"
+            go_type: "time.Time"

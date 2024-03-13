@@ -2,7 +2,9 @@ package entity
 
 import (
 	"errors"
+	"fmt"
 	"github.com/carloseduribeiro/auth-challenge/auth/pkg/domain/entity/cpf"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"strings"
 	"time"
@@ -18,13 +20,14 @@ const (
 const admsDomain = "@br.furabolso.com"
 
 type User struct {
-	id        uuid.UUID
-	userType  Type
-	document  string
-	name      string
-	email     string
-	password  string
-	birthDate time.Time
+	id            uuid.UUID
+	userType      Type
+	document      string
+	name          string
+	email         string
+	password      string
+	birthDate     time.Time
+	activeSession *Session
 }
 
 // NewUser creates a new user.
@@ -88,4 +91,24 @@ func (u *User) Password() string {
 
 func (u *User) BirthDate() time.Time {
 	return u.birthDate
+}
+
+func (u *User) NewSession(sessionId uuid.UUID, createdAt time.Time, d time.Duration, secretKey string) (string, error) {
+	u.activeSession = NewSession(sessionId, u.id, createdAt, d)
+	mapClaims := jwt.MapClaims{
+		"id":       sessionId,
+		"userId":   u.id,
+		"userType": u.userType,
+		"exp":      u.activeSession.ExpiresAt(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, mapClaims)
+	tokenStr, err := token.SignedString([]byte(secretKey))
+	if err != nil {
+		return "", fmt.Errorf("error signing jwt: %v", err)
+	}
+	return tokenStr, nil
+}
+
+func (u *User) ActiveSession() *Session {
+	return u.activeSession
 }

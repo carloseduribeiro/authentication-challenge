@@ -54,6 +54,13 @@ func (ns NullAuthUserType) Value() (driver.Value, error) {
 	return string(ns.AuthUserType), nil
 }
 
+type AuthSession struct {
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	CreatedAt time.Time
+	ExpiresAt time.Time
+}
+
 type AuthUser struct {
 	ID        uuid.UUID
 	Document  string

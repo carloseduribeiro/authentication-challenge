@@ -3,21 +3,23 @@ package configs
 import (
 	"context"
 	"database/sql"
-	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/spf13/viper"
-	"log"
-
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/pgx/v5"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/spf13/viper"
+	"log"
+	"time"
 )
 
 type Conf struct {
-	DatabaseURL     string `mapstructure:"DATABASE_URL"`
-	DatabaseMaxConn int32  `mapstructure:"DATABASE_MAX_CONN"`
-	DatabaseMinConn int32  `mapstructure:"DATABASE_MIN_CONN"`
-	WebServerPort   string `mapstructure:"WEB_SERVER_PORT"`
+	DatabaseURL        string        `mapstructure:"DATABASE_URL"`
+	DatabaseMaxConn    int32         `mapstructure:"DATABASE_MAX_CONN"`
+	DatabaseMinConn    int32         `mapstructure:"DATABASE_MIN_CONN"`
+	WebServerPort      string        `mapstructure:"WEB_SERVER_PORT"`
+	JWTSecretKey       string        `mapstructure:"JWT_SECRET_KEY"`
+	SessionMaxDuration time.Duration `mapstructure:"MAX_SESSION_MINUTES"`
 }
 
 func LoadConfig(path string) (*Conf, error) {
@@ -37,14 +39,14 @@ func LoadConfig(path string) (*Conf, error) {
 	return cfg, err
 }
 
-func SetupDatabase(config *Conf) *pgxpool.Pool {
+func SetupDatabase(ctx context.Context, config *Conf) *pgxpool.Pool {
 	dbConfig, err := pgxpool.ParseConfig(config.DatabaseURL)
 	if err != nil {
 		log.Fatalf("unable to parse database configuration: %v\n", err)
 	}
 	dbConfig.MaxConns = config.DatabaseMaxConn
 	dbConfig.MinConns = config.DatabaseMinConn
-	dbPool, err := pgxpool.New(context.Background(), config.DatabaseURL)
+	dbPool, err := pgxpool.New(ctx, config.DatabaseURL)
 	if err != nil {
 		log.Fatalf("unable to create connection pool: %v\n", err)
 	}

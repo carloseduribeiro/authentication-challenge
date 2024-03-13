@@ -10,6 +10,6 @@ packages:
       all: false
     interfaces:
       TypesPackage:
-      Repository:
+      UserRepository:
         config:
           with-expecter: True

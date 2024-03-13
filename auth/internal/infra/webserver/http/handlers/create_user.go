@@ -10,11 +10,11 @@ import (
 )
 
 type CreateUser struct {
-	repository        entity.Repository
+	repository        entity.UserRepository
 	uuidGeneratorFunc func() (uuid.UUID, error)
 }
 
-func NewCreateUser(repository entity.Repository, uuidGeneratorFunc func() (uuid.UUID, error)) *CreateUser {
+func NewCreateUser(repository entity.UserRepository, uuidGeneratorFunc func() (uuid.UUID, error)) *CreateUser {
 	return &CreateUser{
 		repository:        repository,
 		uuidGeneratorFunc: uuidGeneratorFunc,

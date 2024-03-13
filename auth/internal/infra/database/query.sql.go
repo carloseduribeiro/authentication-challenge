@@ -54,6 +54,28 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (AuthUser, e
 	return i, err
 }
 
+const insertSession = `-- name: InsertSession :exec
+INSERT INTO auth.sessions (id, user_id, created_at, expires_at)
+VALUES ($1, $2, $3, $4)
+`
+
+type InsertSessionParams struct {
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	CreatedAt time.Time
+	ExpiresAt time.Time
+}
+
+func (q *Queries) InsertSession(ctx context.Context, arg InsertSessionParams) error {
+	_, err := q.db.Exec(ctx, insertSession,
+		arg.ID,
+		arg.UserID,
+		arg.CreatedAt,
+		arg.ExpiresAt,
+	)
+	return err
+}
+
 const insertUser = `-- name: InsertUser :exec
 INSERT INTO auth.users (id, document, name, email, password, birthdate, type)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
