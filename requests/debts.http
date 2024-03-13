@@ -1,0 +1,13 @@
+### New Debt
+POST http://{{host}}:{{debtsPort}}/customer/debts
+Content-Type: application/json
+
+{
+  "cpf": "72430024985",
+  "valor": 10.2,
+  "vencimento": "1996-03-06"
+}
+
+### Get Debts
+GET http://{{host}}:{{debtsPort}}/customer/debts/72430024985
+Content-Type: application/json
