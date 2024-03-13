@@ -1,0 +1,11 @@
+### Create user
+POST http://{{host}}:{{port}}/auth/users
+Content-Type: application/json
+
+{
+  "cpf": "72430024985",
+  "nome": "Jhon Doe",
+  "nascimento": "1996-03-06",
+  "email": "jhon@doe.com",
+  "senha": "Jd1996"
+}

@@ -6,6 +6,7 @@ import (
 	entity "github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
 	"github.com/carloseduribeiro/auth-challenge/auth/mocks/internal_/domain/entity/user"
+	"github.com/carloseduribeiro/auth-challenge/auth/pkg/date"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/mock"
@@ -58,8 +59,7 @@ func (c *CreateUserTestSuite) TestExecute() {
 		result, err := c.useCase.Execute(context.TODO(), input)
 		// then
 		c.Nil(result)
-		c.Error(err)
-		c.EqualError(err, "user already exists with the given document")
+		c.ErrorIs(err, ErrUserAlreadyExists)
 		c.repoMock.AssertExpectations(c.T())
 	})
 
@@ -87,8 +87,7 @@ func (c *CreateUserTestSuite) TestExecute() {
 		result, err := c.useCase.Execute(context.TODO(), input)
 		// then
 		c.Nil(result)
-		c.Error(err)
-		c.EqualError(err, "user already exists with the given email")
+		c.ErrorIs(err, ErrUserAlreadyExists)
 		c.repoMock.AssertExpectations(c.T())
 	})
 
@@ -112,7 +111,7 @@ func (c *CreateUserTestSuite) TestExecute() {
 		input := CreateUserInputDto{
 			Document:  validDocument,
 			Name:      "Jhon",
-			BirthDate: time.Now(),
+			BirthDate: date.New(time.Now()),
 			Email:     "jhon@doe.com",
 			Password:  "password",
 		}
@@ -134,7 +133,7 @@ func (c *CreateUserTestSuite) TestExecute() {
 		input := CreateUserInputDto{
 			Document:  validDocument,
 			Name:      "Jhon",
-			BirthDate: time.Now(),
+			BirthDate: date.New(time.Now()),
 			Email:     "jhon@doe.com",
 			Password:  "password",
 		}

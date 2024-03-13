@@ -5,18 +5,16 @@ import (
 	"errors"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/domain/entity/user"
 	"github.com/carloseduribeiro/auth-challenge/auth/internal/infra/database"
+	"github.com/carloseduribeiro/auth-challenge/auth/pkg/date"
 	"github.com/google/uuid"
-	"time"
 )
-
-type uuidGeneratorFunc func() (uuid.UUID, error)
 
 type CreateUser struct {
 	repository        user.Repository
-	uuidGeneratorFunc uuidGeneratorFunc
+	uuidGeneratorFunc func() (uuid.UUID, error)
 }
 
-func NewCreateUserUseCase(repository user.Repository, uuidGeneratorFunc uuidGeneratorFunc) *CreateUser {
+func NewCreateUserUseCase(repository user.Repository, uuidGeneratorFunc func() (uuid.UUID, error)) *CreateUser {
 	return &CreateUser{
 		repository:        repository,
 		uuidGeneratorFunc: uuidGeneratorFunc,
@@ -26,7 +24,7 @@ func NewCreateUserUseCase(repository user.Repository, uuidGeneratorFunc uuidGene
 type CreateUserInputDto struct {
 	Document  string    `json:"cpf"`
 	Name      string    `json:"nome"`
-	BirthDate time.Time `json:"nascimento"`
+	BirthDate date.Date `json:"nascimento"`
 	Email     string    `json:"email"`
 	Password  string    `json:"senha"`
 }
@@ -40,19 +38,24 @@ func isErrUserNotFound(err error) bool {
 	return errors.Is(err, database.ErrUserNotFound)
 }
 
+var ErrUserAlreadyExists = errors.New("user already exists")
+
 func (c *CreateUser) Execute(ctx context.Context, input CreateUserInputDto) (*CreatedUserOutputDto, error) {
 	if u, err := c.repository.GetUserByDocument(ctx, input.Document); err != nil && !isErrUserNotFound(err) {
 		return nil, err
 	} else if u != nil {
-		return nil, errors.New("user already exists with the given document")
+		return nil, ErrUserAlreadyExists
 	}
 	if u, err := c.repository.GetUserByEmail(ctx, input.Email); err != nil && !isErrUserNotFound(err) {
 		return nil, err
 	} else if u != nil {
-		return nil, errors.New("user already exists with the given email")
+		return nil, ErrUserAlreadyExists
 	}
 	u, err := user.NewUser(
-		input.Document, input.Name, input.Email, input.BirthDate, user.WithUUIDGeneratorFunc(c.uuidGeneratorFunc), user.WithPassword(input.Password))
+		input.Document, input.Name, input.Email, input.BirthDate.T,
+		user.WithUUIDGeneratorFunc(c.uuidGeneratorFunc),
+		user.WithPassword(input.Password),
+	)
 	if err != nil {
 		return nil, err
 	}
