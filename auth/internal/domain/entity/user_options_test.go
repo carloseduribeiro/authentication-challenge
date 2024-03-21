@@ -1,56 +1,10 @@
 package entity
 
 import (
-	"errors"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
 	"testing"
 )
-
-func TestWithUUIDGeneratorFunc(t *testing.T) {
-	t.Run("should generate and set the user id", func(t *testing.T) {
-		// given
-		user := new(User)
-		uuidMock := uuid.New()
-		uuidGeneratorFuncMock := func() (uuid.UUID, error) {
-			return uuidMock, nil
-		}
-		// when
-		f := WithUUIDGeneratorFunc(uuidGeneratorFuncMock)
-		err := f(user)
-		// then
-		assert.NoError(t, err)
-		assert.Equal(t, uuidMock, user.id)
-	})
-
-	t.Run("should return an error when the generator returns error", func(t *testing.T) {
-		// given
-		user := new(User)
-		fakeErr := errors.New("fake err")
-		uuidGeneratorFuncMock := func() (uuid.UUID, error) {
-			return uuid.UUID{}, fakeErr
-		}
-		// when
-		f := WithUUIDGeneratorFunc(uuidGeneratorFuncMock)
-		err := f(user)
-		// then
-		assert.Error(t, err)
-		assert.ErrorIs(t, err, fakeErr)
-	})
-}
-
-func TestWithID(t *testing.T) {
-	// given
-	user := new(User)
-	uuidMock := uuid.New()
-	// when
-	f := WithID(uuidMock)
-	err := f(user)
-	// then
-	assert.NoError(t, err)
-	assert.Equal(t, uuidMock, user.id)
-}
 
 func TestWithType(t *testing.T) {
 	// given
@@ -100,7 +54,7 @@ func TestWithPassword(t *testing.T) {
 }
 
 func TestWithPasswordHashed(t *testing.T) {
-	t.Run("should not possible to create a user with an empty password", func(t *testing.T) {
+	t.Run("should not possible to create a user with an empty hashed password", func(t *testing.T) {
 		// given
 		user := new(User)
 		// when
@@ -108,7 +62,7 @@ func TestWithPasswordHashed(t *testing.T) {
 		err := f(user)
 		// then
 		assert.Error(t, err)
-		assert.EqualError(t, err, "invalid password")
+		assert.EqualError(t, err, "invalid hashed password")
 	})
 
 	t.Run("must return an error when the given password is not hashed", func(t *testing.T) {

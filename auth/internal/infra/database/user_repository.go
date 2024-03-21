@@ -26,7 +26,7 @@ func (r *UserRepository) GetUserByDocument(ctx context.Context, document string)
 		}
 		return nil, err
 	}
-	return entity.NewUser(m.Document, m.Name, m.Email, m.Birthdate, entity.WithID(m.ID), entity.WithPasswordHashed(m.Password))
+	return entity.NewUser(m.ID, m.Document, m.Name, m.Email, m.Birthdate, entity.WithPasswordHashed(m.Password))
 }
 
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*entity.User, error) {
@@ -37,7 +37,7 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*ent
 		}
 		return nil, err
 	}
-	return entity.NewUser(m.Document, m.Name, m.Email, m.Birthdate, entity.WithID(m.ID), entity.WithPasswordHashed(m.Password))
+	return entity.NewUser(m.ID, m.Document, m.Name, m.Email, m.Birthdate, entity.WithPasswordHashed(m.Password))
 }
 
 func (r *UserRepository) Create(ctx context.Context, user *entity.User) error {

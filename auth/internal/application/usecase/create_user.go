@@ -51,10 +51,12 @@ func (c *CreateUser) Execute(ctx context.Context, input CreateUserInputDto) (*Cr
 	} else if u != nil {
 		return nil, ErrUserAlreadyExists
 	}
+	id, err := c.uuidGeneratorFunc()
+	if err != nil {
+		return nil, err
+	}
 	u, err := entity.NewUser(
-		input.Document, input.Name, input.Email, input.BirthDate.T,
-		entity.WithUUIDGeneratorFunc(c.uuidGeneratorFunc),
-		entity.WithPassword(input.Password),
+		id, input.Document, input.Name, input.Email, input.BirthDate.T, entity.WithPassword(input.Password),
 	)
 	if err != nil {
 		return nil, err
@@ -64,7 +66,7 @@ func (c *CreateUser) Execute(ctx context.Context, input CreateUserInputDto) (*Cr
 	}
 	input.Password = u.Password()
 	return &CreatedUserOutputDto{
-		ID:                 u.ID(),
+		ID:                 id,
 		CreateUserInputDto: &input,
 	}, nil
 }

@@ -30,9 +30,8 @@ type User struct {
 	activeSession *Session
 }
 
-// NewUser creates a new user.
-// TODO: remove WithID option and add id argument to this constructor because its not needed.
-func NewUser(document, name, email string, birthDate time.Time, userOpts ...UserOption) (*User, error) {
+// NewUser creates a new user
+func NewUser(id uuid.UUID, document, name, email string, birthDate time.Time, userOpts ...UserOption) (*User, error) {
 	if !cpf.Validate(document) {
 		return nil, errors.New("invalid cpf")
 	}
@@ -41,10 +40,6 @@ func NewUser(document, name, email string, birthDate time.Time, userOpts ...User
 	}
 	if len(email) < 3 {
 		return nil, errors.New("invalid email")
-	}
-	id, err := uuid.NewUUID()
-	if err != nil {
-		return nil, err
 	}
 	user := &User{
 		id:        id,
@@ -58,7 +53,7 @@ func NewUser(document, name, email string, birthDate time.Time, userOpts ...User
 		user.userType = AdminType
 	}
 	for _, opt := range userOpts {
-		if err = opt(user); err != nil {
+		if err := opt(user); err != nil {
 			return nil, err
 		}
 	}

@@ -91,6 +91,25 @@ func (c *CreateUserTestSuite) TestExecute() {
 		c.repoMock.AssertExpectations(c.T())
 	})
 
+	c.Run("must return an error if occurs any error when generating a new uuid", func() {
+		// given
+		invalidDocument := "12345"
+		input := CreateUserInputDto{Document: invalidDocument}
+		fakeErr := errors.New("any error")
+		c.useCase.uuidGeneratorFunc = func() (uuid.UUID, error) {
+			return uuid.UUID{}, fakeErr
+		}
+		// when
+		c.repoMock.EXPECT().GetUserByDocument(mock.Anything, mock.Anything).Return(nil, database.ErrUserNotFound)
+		c.repoMock.EXPECT().GetUserByEmail(mock.Anything, mock.Anything).Return(nil, database.ErrUserNotFound)
+		result, err := c.useCase.Execute(context.TODO(), input)
+		// then
+		c.Nil(result)
+		c.Error(err)
+		c.ErrorIs(err, fakeErr)
+		c.repoMock.AssertExpectations(c.T())
+	})
+
 	c.Run("must return an error from entity when NewUser method call returns error", func() {
 		// given
 		invalidDocument := "12345"
