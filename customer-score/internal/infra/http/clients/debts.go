@@ -3,7 +3,7 @@ package clients
 import (
 	"context"
 	"encoding/json"
-	"github.com/carloseduribeiro/auth-challenge/customer-score/internal/domain/entity"
+	"github.com/carloseduribeiro/authentication-challenge/customer-score/internal/domain/entity"
 	"net/http"
 )
 
